@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<uses-permission android:name="android.permission.CAMERA"/>
 <dict>
     <key>NSCameraUsageDescription</key>
-    <string>We need to access your camera for face detection</string>
+    <string>camera access</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>microphone</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
