@@ -15,6 +15,7 @@ class HomeController extends GetxController {
   FaceDetetorController? _faceDetect;
   bool _isDetecting = false;
   List<FaceModel>? faces;
+  int _frameCount = 0;
 
   //camera zoom variables
   double currentZoomLevel = 1.0;
@@ -62,11 +63,20 @@ class HomeController extends GetxController {
   }
 
   Future<void> startImageStream() async {
-    await cameraController!.startImageStream(_processCameraImage);
+    await cameraController!.startImageStream(
+      (image) {
+        _frameCount++;
+        if (_frameCount % 10 != 0) {
+          _frameCount = 0;
+          _processCameraImage;
+        }
+      },
+    );
   }
 
   void _processCameraImage(CameraImage image) async {
     if (_isDetecting) return;
+
     print('1--');
 
     print('--------processing-------');
@@ -98,7 +108,7 @@ class HomeController extends GetxController {
 
       List<FaceModel>? faces = await _faceDetect?.detectFaces(inputImage);
       print('4--');
-      print(faces);
+      print(faces?.first.smile);
       print('detected');
 
       if (faces != null && faces!.isNotEmpty) {

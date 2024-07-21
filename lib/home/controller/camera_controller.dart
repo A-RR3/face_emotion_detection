@@ -8,6 +8,7 @@ class CameraManager {
   Future<CameraController?> load() async {
     try {
       cameras = await availableCameras();
+
       //Set front camera if available or back if not available
       int position = cameras!.length > 0 ? 1 : 0;
       _controller = CameraController(

@@ -1,11 +1,12 @@
 class FaceModel {
   double? smile;
-  double? rightYearsOpen;
-  double? leftYearsOpen;
+  double? rightEyesOpenOpen;
+  double? leftEyesOpenOpen;
+  bool? isTeethVisible;
 
-  FaceModel({
-    this.smile,
-    this.rightYearsOpen,
-    this.leftYearsOpen,
-  });
+  FaceModel(
+      {this.smile,
+      this.rightEyesOpenOpen,
+      this.leftEyesOpenOpen,
+      this.isTeethVisible});
 }

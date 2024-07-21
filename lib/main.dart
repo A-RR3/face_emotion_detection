@@ -8,6 +8,7 @@ import 'face_detection_page.dart';
 // List<CameraDescription> cameras = [];
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   // WidgetsFlutterBinding.ensureInitialized();
   // cameras = await availableCameras();
   runApp(MyApp());
