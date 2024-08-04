@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import '../module/face_model.dart';
 
@@ -12,9 +13,9 @@ class FaceDetetorController {
               enableLandmarks: true,
               enableContours: true,
               enableTracking: true,
-              performanceMode: FaceDetectorMode.fast),
+              performanceMode: FaceDetectorMode.accurate),
         );
-
+/**
   Future<List<FaceModel>?> detectFaces(InputImage inputImage) async {
     print('now detecting---');
     final faces = await _faceDetector.processImage(inputImage);
@@ -27,15 +28,32 @@ class FaceDetetorController {
     print(faceModels?.first.smile);
     return faceModels;
   }
+    **/
+  Future<Face?> detectFace(InputImage inputImage) async {
+    print('now detecting---');
+    try {
+      final faces = await _faceDetector.processImage(inputImage);
+      if (faces.isEmpty) {
+        print('No faces detected.');
+        return null;
+      }
 
-  static List<FaceModel>? extractFaceInfo(List<Face>? faces) {
-    List<FaceModel>? response = [];
+      return faces.first;
+    } catch (e) {
+      throw Exception('error detecting image: $e');
+    }
+  }
+
+  static FaceModel? extractFaceInfo(Face? face) {
+    // List<FaceModel>? response = [];
+
     double? smile;
     double? leftEyesOpen;
     double? rightEyesOpen;
     bool? isTeethVisible;
+    Rect? boundingBox;
 
-    for (Face face in faces!) {
+    if (face != null) {
       final rect = face.boundingBox;
       if (face.smilingProbability != null) {
         smile = face.smilingProbability;
@@ -50,12 +68,13 @@ class FaceDetetorController {
           smile: smile,
           leftEyesOpenOpen: leftEyesOpen,
           rightEyesOpenOpen: rightEyesOpen,
-          isTeethVisible: isTeethVisible);
+          isTeethVisible: isTeethVisible,
+          boundingBox: boundingBox);
 
-      response.add(faceModel);
+      // response.add(faceModel);
+      return faceModel;
     }
-
-    return response;
+    return null;
   }
 
   static bool isSmilingWithTeeth(Face face) {
@@ -66,13 +85,13 @@ class FaceDetetorController {
     // Calculate distance between mouth corners and nose tip
     var distance = sqrt(
         pow(leftMouthCorner!.position.x - rightMouthCorner!.position.x, 2) +
-            pow(leftMouthCorner!.position.y - rightMouthCorner!.position.y, 2));
+            pow(leftMouthCorner.position.y - rightMouthCorner.position.y, 2));
 
     // Check if distance is greater than threshold
     if (distance > 10) {
       // Check if teeth are visible
       var teethVisible = (distance /
-              (leftMouthCorner!.position.x - rightMouthCorner!.position.x)) >
+              (leftMouthCorner.position.x - rightMouthCorner.position.x)) >
           0.5;
 
       // Return true if both conditions are met

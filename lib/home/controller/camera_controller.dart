@@ -10,7 +10,7 @@ class CameraManager {
       cameras = await availableCameras();
 
       //Set front camera if available or back if not available
-      int position = cameras!.length > 0 ? 1 : 0;
+      int position = cameras!.isNotEmpty ? 1 : 0;
       _controller = CameraController(
         cameras![position],
         ResolutionPreset.medium,
@@ -24,6 +24,7 @@ class CameraManager {
     } catch (e) {
       print('Error initializing camera: $e');
     }
+    return null;
   }
 
   CameraController? get controller => _controller;
